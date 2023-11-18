@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Jogos</title>
+    <style>
+         body {
+    font-family: 'Arial', sans-serif;
+    background-color: #171a21;
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+header {
+    background-color: #2c2f3b;
+    padding: 20px;
+    width: 10%;
+    text-align: center;
+}
+
+h1 {
+    margin: 0;
+    color: #ffffff;
+}
+
+main {
+    text-align: center;
+    margin: 20px;
+}
+
+.game-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.game-card {
+    background-color: #3a3e4a;
+    color: #ffffff;
+    border: 1px solid #2c2f3b;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px;
+    width: 300px;
+}
+
+a {
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #ffffff;
+}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Bem-vindo à Página de Gerenciamento de Jogos</h1>
+    </header>
+
+    <main>
+        <h2>Escolha um jogo para Gerenciar</h2>
+
+        <div class="game-container" id="gameContainer">
+            <div class="game-container">
+                <div class="game-card">
+                    <img src="imagens/gta4.jpeg" alt="gta4" >
+                    <h3>GTA IV</h3>
+                
+                    <a href="#">Jogar</a>
+                </div>
+    
+                <div class="game-card">
+                    <img src="imagens/injustice.jpg" alt="injustice" >
+                    <h3>Injustice 2</h3>
+                    
+                    <a href="#">Jogar</a>
+                </div>
+    
+                <div class="game-card">
+                    <img src="imagens/minecraft.jpg" alt="minecraft" >
+                    <h3>Minecraft</h3>
+                    
+                    <a href="#">Jogar</a>
+                </div>
+    
+                <div class="game-card">
+                    <img src="imagens/thesims.png" alt="thesims" >
+                    <h3>The Sims 4</h3>
+                   
+                    <a href="#">Jogar</a>
+                </div>
+    
+                <div class="game-card">
+                    <img src="imagens/cod.png" alt="cod" >
+                    <h3>COD:Warzone</h3>
+                  
+                    <a href="#">Jogar</a>
+                </div>
+    
+                <div class="game-card">
+                    <img src="imagens/fifa.jpg" alt="fifa" >
+                    <h3>Fifa 20</h3>
+                   
+                    <a href="#">Jogar</a>
+        </div>
+
+        <h2>Adicionar Novo Jogo:</h2>
+        <form id="gameForm">
+            <label for="gameName">Nome do Jogo:</label>
+            <input type="text" id="gameName" required>
+
+            <label for="gamePlatform">Plataforma:</label>
+            <select id="gamePlatform" required>
+                <option value="steam">Steam</option>
+                <option value="psn">PSN</option>
+                <option value="epic">Epic Games</option>
+                <option value="outro">Outros</option>
+            </select>
+
+            <label for="gameStatus">Status:</label>
+            <select id="gameStatus" required>
+                <option value="jogado">Jogado</option>
+                <option value="jogando">Jogando</option>
+                <option value="zerado">Zerado</option>
+                <option value="nao-recomendo">Não Recomendo</option>
+                <option value="outro">Outro</option>
+            </select>
+
+            <label for="gameCategories">Categorias </label>
+            <input type="text" id="gameCategories">
+
+            <label for="gameRating">Nota:</label>
+            <input type="number" id="gameRating" min="1" max="10" required>
+
+            <button type="button" onclick="addGame()">Adicionar Jogo</button>
+        </form>
+    </main>
+
+    <script>
+        function addGame() {
+            var gameName = document.getElementById('gameName').value;
+            var gamePlatform = document.getElementById('gamePlatform').value;
+            var gameStatus = document.getElementById('gameStatus').value;
+            var gameCategories = document.getElementById('gameCategories').value.split(',').map(category => category.trim());
+            var gameRating = document.getElementById('gameRating').value;
+
+            var game = {
+                name: gameName,
+                platform: gamePlatform,
+                status: gameStatus,
+                categories: gameCategories,
+                rating: gameRating
+            };
+
+            addGameToContainer(game);
+        }
+
+        function addGameToContainer(game) {
+            var gameContainer = document.getElementById('gameContainer');
+
+            var gameCard = document.createElement('div');
+            gameCard.className = 'game-card';
+            gameCard.innerHTML = `
+                <h3>${game.name}</h3>
+                <p>Plataforma: ${game.platform}</p>
+                <p>Status: ${game.status}</p>
+                <p>Categorias: ${game.categories.join(', ')}</p>
+                <p>Nota: ${game.rating}</p>
+                <a href="#">Jogar</a>
+                <button onclick="editGame(this)">Editar</button>
+                <button onclick="deleteGame(this)">Excluir</button>
+            `;
+
+            gameContainer.appendChild(gameCard);
+        }
+
+        function deleteGame(button) {
+            var gameCard = button.parentElement;
+            var gameContainer = document.getElementById('gameContainer');
+            gameContainer.removeChild(gameCard);
+        }
+
+        function editGame(button) {
+            var gameCard = button.parentElement;
+            var gameName = gameCard.querySelector('h3').innerText;
+            var gamePlatform = gameCard.querySelector('p:nth-child(2)').innerText.replace('Plataforma: ', '');
+            var gameStatus = gameCard.querySelector('p:nth-child(3)').innerText.replace('Status: ', '');
+            var gameCategories = gameCard.querySelector('p:nth-child(4)').innerText.replace('Categorias: ', '').split(', ');
+            var gameRating = gameCard.querySelector('p:nth-child(5)').innerText.replace('Nota: ', '');
+
+            document.getElementById('gameName').value = gameName;
+            document.getElementById('gamePlatform').value = gamePlatform;
+            document.getElementById('gameStatus').value = gameStatus;
+            document.getElementById('gameCategories').value = gameCategories.join(', ');
+            document.getElementById('gameRating').value = gameRating;
+
+            
+            gameContainer.removeChild(gameCard);
+        }
+    </script>
+</body>
+</html>
